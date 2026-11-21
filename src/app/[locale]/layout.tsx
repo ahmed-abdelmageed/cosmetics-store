@@ -9,7 +9,7 @@ import Providers from "@/components/providers";
 
 const cairo = Cairo({ variable: "--font-cairo", subsets: ["arabic", "latin"] });
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
-const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"], });
+const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"], style: ["normal", "italic"] });
 
 export const metadata: Metadata = {
   title: {

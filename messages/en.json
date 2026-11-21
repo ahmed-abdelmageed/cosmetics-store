@@ -8,7 +8,7 @@
     "dashboard": "Dashboard",
     "login": "Sign In",
     "logout": "Sign Out",
-    "announcement": "Free delivery on orders over 1,000 EGP · Cash on delivery available",
+    "announcement": "Cash on delivery · 100% authentic products",
     "search": "Search",
     "account": "Account",
     "cart": "Cart"
@@ -27,20 +27,33 @@
     "offers": "Offers",
     "bestSellers": "Best Sellers",
     "viewAll": "View All",
-    "heroTitle": "Skincare, makeup & fragrance",
-    "heroSubtitle": "Original products from the brands you trust, delivered to your door.",
+    "heroTitle": "Makeup, skincare & fragrance",
+    "heroSubtitle": "Original products from brands you trust, delivered to your door.",
     "shopNow": "Shop Now",
     "menSub": "Grooming, fragrances and daily essentials",
     "womenSub": "Skincare, makeup and signature scents",
     "offersSub": "Hand-picked products at their best prices",
     "newArrivals": "New Arrivals",
-    "promoTitle": "Up to 30% off skincare",
-    "promoSub": "Serums, moisturisers and cleansers from brands you already use. While stock lasts.",
+    "promoTitle": "Skincare, now on offer",
+    "promoSub": "Serums, moisturisers and cleansers from brands you already use, at lower prices while stock lasts.",
     "promoCta": "Shop the Offers",
     "productsCount": "Products",
     "shopAll": "Shop all",
     "shopWomen": "Shop women",
-    "shopMen": "Shop men"
+    "shopMen": "Shop men",
+    "previous": "Previous",
+    "next": "Next",
+    "featuredTitle": "Shop our picks",
+    "collectionsTitle": "Collections",
+    "heroBadge": "Original beauty · Cash on delivery",
+    "heroCard1Title": "Authentic products",
+    "heroCard1Sub": "Original brands only",
+    "heroCard2Title": "Cash on delivery",
+    "heroCard2Sub": "Pay when your order arrives",
+    "statProducts": "Products",
+    "statCategories": "Categories",
+    "statAuthentic": "Authentic",
+    "exploreProducts": "Explore products"
   },
   "shop": {
     "title": "All Products",
@@ -55,7 +68,16 @@
     "outOfStock": "Currently unavailable",
     "addToCart": "Add to Cart",
     "unavailable": "Unavailable",
-    "addedToCart": "Added to cart"
+    "addedToCart": "Added to cart",
+    "quantity": "Quantity",
+    "description": "Description",
+    "delivery": "Delivery & payment",
+    "deliveryText": "Delivered to your door. Pay in cash when your order arrives.",
+    "authenticText": "100% authentic products from official distributors.",
+    "related": "You may also like",
+    "quickView": "Quick view",
+    "viewDetails": "View full details",
+    "close": "Close"
   },
   "cart": {
     "title": "Shopping Cart",
@@ -63,7 +85,14 @@
     "browse": "Browse Products",
     "summary": "Order Summary",
     "total": "Total",
-    "checkout": "Proceed to Checkout"
+    "checkout": "Proceed to Checkout",
+    "drawerTitle": "Your bag",
+    "subtotal": "Subtotal",
+    "viewCart": "View bag",
+    "continue": "Continue shopping",
+    "drawerNote": "Cash on delivery. Shipping is confirmed by phone after you order.",
+    "remove": "Remove",
+    "close": "Close"
   },
   "checkout": {
     "title": "Delivery Details",
@@ -215,7 +244,8 @@
     "uploadHint": "PNG or JPG. The first image is the cover.",
     "confirmDeleteProduct": "Delete this product? This can't be undone.",
     "delete": "Delete",
-    "notes": "Notes"
+    "notes": "Notes",
+    "slideTitleHint": "Tip: wrap words in *stars* to highlight them on the homepage."
   },
   "common": {
     "loading": "Loading...",

@@ -91,7 +91,7 @@ export default function SlidesManager({ slides }: { slides: Slide[] }) {
               <Image src={s.image} alt="" fill sizes="160px" className={`object-cover ${s.active ? "" : "opacity-40"}`} />
             </div>
             <div className="flex-1 min-w-0">
-              <p className="font-medium text-sm text-ink line-clamp-1">{pickLocale(locale, s.titleEn, s.titleAr)}</p>
+              <p className="font-medium text-sm text-ink line-clamp-1">{pickLocale(locale, s.titleEn, s.titleAr).replace(/\*/g, "")}</p>
               <p className="text-xs text-ink/50 mt-1">
                 {t("position")}: {s.order} · {s.active ? t("active") : t("inactive")}
                 {s.link && <span dir="ltr"> · {s.link}</span>}
@@ -138,6 +138,7 @@ export default function SlidesManager({ slides }: { slides: Slide[] }) {
             <label className="label">{t("slideTitleAr")}</label>
             <input required dir="rtl" value={form.titleAr} onChange={(e) => setForm({ ...form, titleAr: e.target.value })} className="field" />
           </div>
+          <p className="sm:col-span-2 -mt-1 text-xs text-ink/50">{t("slideTitleHint")}</p>
           <div>
             <label className="label">{t("slideSubtitleEn")}{opt}</label>
             <input dir="ltr" value={form.subtitleEn} onChange={(e) => setForm({ ...form, subtitleEn: e.target.value })} className="field" />

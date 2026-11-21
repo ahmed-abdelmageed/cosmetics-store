@@ -1,1 +1,5 @@
-export { default } from "@/components/page-loading";
+import { ProductSkeleton } from "@/components/skeletons";
+
+export default function Loading() {
+  return <ProductSkeleton />;
+}

@@ -3,6 +3,7 @@ import ProductCard from "@/components/product-card";
 import { Link } from "@/i18n/navigation";
 import { getTranslations, getLocale } from "next-intl/server";
 import { pickLocale } from "@/i18n/pick-locale";
+import Reveal from "@/components/reveal";
 
 export const dynamic = "force-dynamic";
 
@@ -48,9 +49,9 @@ export default async function ShopPage({
 
   return (
     <div className="container-app py-10 md:py-14">
-      <h1 className="font-display text-3xl md:text-4xl mb-8">{pageTitle}</h1>
+      <h1 className="font-display text-3xl md:text-4xl mb-8 animate-rise">{pageTitle}</h1>
 
-      <div className="flex gap-2 flex-wrap mb-8 pb-8 border-b border-line">
+      <div className="flex gap-2 flex-wrap mb-8 pb-8 border-b border-line animate-rise" style={{ animationDelay: "100ms" }}>
         <Link
           href="/shop"
           className={`px-4 py-2 rounded-[4px] text-sm border transition-colors ${
@@ -100,8 +101,10 @@ export default async function ShopPage({
         <p className="py-16 text-center text-ink/50">{t("noProducts")}</p>
       ) : (
         <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-6">
-          {products.map((p) => (
-            <ProductCard key={p.id} product={p} />
+          {products.map((p, i) => (
+            <Reveal key={p.id} delay={(i % 4) * 80}>
+              <ProductCard product={p} />
+            </Reveal>
           ))}
         </div>
       )}

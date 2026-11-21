@@ -53,3 +53,20 @@ export const useCartStore = create<CartState>()(
     { name: "cosmetics-cart" }
   )
 );
+
+type CartDrawerState = {
+  open: boolean;
+  /** Increments on every add so the header badge can replay its bump animation. */
+  pulse: number;
+  show: () => void;
+  hide: () => void;
+  notifyAdded: () => void;
+};
+
+export const useCartDrawer = create<CartDrawerState>()((set) => ({
+  open: false,
+  pulse: 0,
+  show: () => set({ open: true }),
+  hide: () => set({ open: false }),
+  notifyAdded: () => set((s) => ({ open: true, pulse: s.pulse + 1 })),
+}));

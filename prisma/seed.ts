@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { slidesData } from "./slides-data";
 import bcrypt from "bcryptjs";
 
 const prisma = new PrismaClient();
@@ -191,42 +192,8 @@ async function main() {
     await prisma.product.upsert({ where: { slug: p.slug }, update: {}, create: p });
   }
 
-  const slidesData = [
-    {
-      titleEn: "Shine with the Latest Beauty Products",
-      titleAr: "تألقي مع أحدث منتجات التجميل",
-      subtitleEn: "Up to 30% off on selected items",
-      subtitleAr: "خصومات تصل إلى 30% على تشكيلة مختارة",
-      image: "https://images.unsplash.com/photo-1522335789203-aabd1fc54bc9?w=1600",
-      link: "/shop?onSale=1",
-      order: 0,
-      active: true,
-    },
-    {
-      titleEn: "Grooming Essentials for Him",
-      titleAr: "أساسيات العناية للرجال",
-      subtitleEn: "Discover our men's collection",
-      subtitleAr: "اكتشف تشكيلة الرجال",
-      image: "https://images.unsplash.com/photo-1621607512214-68297480165e?w=1600",
-      link: "/shop?gender=men",
-      order: 1,
-      active: true,
-    },
-    {
-      titleEn: "Ultimate Skincare for Her",
-      titleAr: "عناية فائقة ببشرتك",
-      subtitleEn: "100% natural products for healthy, glowing skin",
-      subtitleAr: "منتجات طبيعية 100% لبشرة صحية ونضرة",
-      image: "https://images.unsplash.com/photo-1596462502278-27bfdc403348?w=1600",
-      link: "/shop?gender=women",
-      order: 2,
-      active: true,
-    },
-  ];
-
   for (const s of slidesData) {
-    const existing = await prisma.slide.findFirst({ where: { titleEn: s.titleEn } });
-    if (!existing) await prisma.slide.create({ data: s });
+    await prisma.slide.upsert({ where: { id: s.id }, update: {}, create: s });
   }
 
   console.log("Seed completed. Admin login:", adminEmail, "/", adminPassword);

@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useHydrated } from "@/lib/use-hydrated";
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
@@ -10,9 +10,8 @@ import { Trash2, Minus, Plus } from "lucide-react";
 
 export default function CartPage() {
   const { items, removeItem, updateQuantity, totalPrice } = useCartStore();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHydrated();
   const t = useTranslations("cart");
-  useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
 

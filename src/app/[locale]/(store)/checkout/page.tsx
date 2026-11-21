@@ -1,6 +1,7 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState } from "react";
+import { useHydrated } from "@/lib/use-hydrated";
 import { useTranslations } from "next-intl";
 import { useRouter } from "@/i18n/navigation";
 import { useCartStore } from "@/lib/cart-store";
@@ -11,12 +12,10 @@ import Spinner from "@/components/spinner";
 export default function CheckoutPage() {
   const router = useRouter();
   const { items, totalPrice, clear } = useCartStore();
-  const [mounted, setMounted] = useState(false);
+  const mounted = useHydrated();
   const [loading, setLoading] = useState(false);
   const [form, setForm] = useState({ fullName: "", phone: "", address: "", city: "", notes: "" });
   const t = useTranslations("checkout");
-
-  useEffect(() => setMounted(true), []);
 
   if (!mounted) return null;
 

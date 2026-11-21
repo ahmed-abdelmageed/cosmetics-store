@@ -1,15 +1,17 @@
 "use client";
 
+import { useCallback, useState } from "react";
 import Image from "next/image";
 import toast from "react-hot-toast";
 import { useLocale, useTranslations } from "next-intl";
 import { Link } from "@/i18n/navigation";
-import { useCartStore } from "@/lib/cart-store";
+import { useCartDrawer, useCartStore } from "@/lib/cart-store";
 import { formatPrice, getFinalPrice } from "@/lib/utils";
 import { pickLocale } from "@/i18n/pick-locale";
-import { ShoppingBag, ImageOff } from "lucide-react";
+import { ShoppingBag, ImageOff, Eye } from "lucide-react";
+import QuickView from "@/components/quick-view";
 
-type Product = {
+export type CardProduct = {
   id: string;
   nameEn: string;
   nameAr: string;
@@ -19,16 +21,21 @@ type Product = {
   discountActive: boolean;
   images: string[];
   stock: number;
+  descriptionEn?: string;
+  descriptionAr?: string;
 };
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({ product }: { product: CardProduct }) {
   const addItem = useCartStore((s) => s.addItem);
+  const notifyAdded = useCartDrawer((s) => s.notifyAdded);
   const locale = useLocale();
   const t = useTranslations("product");
   const name = pickLocale(locale, product.nameEn, product.nameAr);
   const finalPrice = getFinalPrice(product.price, product.discountPercent, product.discountActive);
   const hasDiscount = product.discountActive && product.discountPercent > 0;
   const outOfStock = product.stock <= 0;
+  const [quickOpen, setQuickOpen] = useState(false);
+  const closeQuick = useCallback(() => setQuickOpen(false), []);
 
   const handleAdd = () => {
     if (outOfStock) {
@@ -36,7 +43,7 @@ export default function ProductCard({ product }: { product: Product }) {
       return;
     }
     addItem({ id: product.id, name, price: finalPrice, image: product.images[0], stock: product.stock }, 1);
-    toast.success(t("addedToCart"));
+    notifyAdded();
   };
 
   return (
@@ -83,6 +90,15 @@ export default function ProductCard({ product }: { product: Product }) {
         </div>
 
         <button
+          onClick={() => setQuickOpen(true)}
+          aria-label={t("quickView")}
+          title={t("quickView")}
+          className="absolute top-3 end-3 w-9 h-9 rounded-full bg-white/95 text-ink shadow-sm flex items-center justify-center transition-all duration-300 hover:bg-ink hover:text-white md:opacity-0 md:-translate-y-1 md:group-hover:opacity-100 md:group-hover:translate-y-0 focus-visible:opacity-100"
+        >
+          <Eye size={16} />
+        </button>
+
+        <button
           onClick={handleAdd}
           disabled={outOfStock}
           className="absolute bottom-3 inset-x-3 bg-white text-ink hover:bg-ink hover:text-white rounded-[4px] py-2.5 text-xs font-medium flex items-center justify-center gap-2 shadow-sm transition-all duration-300 md:translate-y-2 md:opacity-0 md:group-hover:translate-y-0 md:group-hover:opacity-100 disabled:opacity-0 disabled:pointer-events-none"
@@ -105,6 +121,7 @@ export default function ProductCard({ product }: { product: Product }) {
           {hasDiscount && <span className="text-ink/40 line-through text-xs">{formatPrice(product.price)}</span>}
         </div>
       </div>
+      {quickOpen && <QuickView product={product} onClose={closeQuick} />}
     </div>
   );
 }
