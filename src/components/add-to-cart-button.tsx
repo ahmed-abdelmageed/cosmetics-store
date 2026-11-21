@@ -4,7 +4,7 @@ import { useState } from "react";
 import toast from "react-hot-toast";
 import { useTranslations } from "next-intl";
 import { useCartStore } from "@/lib/cart-store";
-import { Minus, Plus, ShoppingCart } from "lucide-react";
+import { Minus, Plus } from "lucide-react";
 
 type Props = {
   product: { id: string; name: string; price: number; image?: string; stock: number };
@@ -17,7 +17,7 @@ export default function AddToCartButton({ product }: Props) {
 
   return (
     <div className="flex items-center gap-4">
-      <div className="flex items-center border border-neutral-300 rounded-lg">
+      <div className="flex items-center border border-line rounded-[4px]">
         <button className="p-3" onClick={() => setQty((q) => Math.max(1, q - 1))}>
           <Minus size={16} />
         </button>
@@ -32,9 +32,9 @@ export default function AddToCartButton({ product }: Props) {
           addItem(product, qty);
           toast.success(t("addedToCart"));
         }}
-        className="flex-1 bg-amber-600 hover:bg-amber-700 disabled:opacity-50 text-white rounded-lg py-3 font-medium flex items-center justify-center gap-2"
+        className="btn-primary flex-1 py-3.5"
       >
-        <ShoppingCart size={18} /> {t("addToCart")}
+        {t("addToCart")}
       </button>
     </div>
   );

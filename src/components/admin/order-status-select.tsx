@@ -2,19 +2,14 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import toast from "react-hot-toast";
 import Spinner from "@/components/spinner";
-
-const statuses = [
-  { value: "PENDING", label: "Pending" },
-  { value: "CONFIRMED", label: "Confirmed" },
-  { value: "SHIPPED", label: "Shipped" },
-  { value: "DELIVERED", label: "Delivered" },
-  { value: "CANCELLED", label: "Cancelled" },
-];
+import { ORDER_STATUSES } from "@/lib/order-status";
 
 export default function OrderStatusSelect({ id, status }: { id: string; status: string }) {
   const router = useRouter();
+  const t = useTranslations("admin");
   const [loading, setLoading] = useState(false);
 
   const handleChange = async (value: string) => {
@@ -26,10 +21,10 @@ export default function OrderStatusSelect({ id, status }: { id: string; status: 
     });
     setLoading(false);
     if (!res.ok) {
-      toast.error("An error occurred");
+      toast.error(t("genericError"));
       return;
     }
-    toast.success("Status updated");
+    toast.success(t("statusUpdated"));
     router.refresh();
   };
 
@@ -40,11 +35,11 @@ export default function OrderStatusSelect({ id, status }: { id: string; status: 
         value={status}
         disabled={loading}
         onChange={(e) => handleChange(e.target.value)}
-        className="border border-neutral-300 rounded-lg px-2 py-1 text-sm disabled:opacity-50"
+        className="field !w-auto !py-1.5 !text-[13px] disabled:opacity-50"
       >
-        {statuses.map((s) => (
-          <option key={s.value} value={s.value}>
-            {s.label}
+        {ORDER_STATUSES.map((s) => (
+          <option key={s} value={s}>
+            {t(`status_${s}`)}
           </option>
         ))}
       </select>

@@ -2,14 +2,16 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useTranslations } from "next-intl";
 import toast from "react-hot-toast";
-import { Trash2 } from "lucide-react";
+import { Plus, Trash2 } from "lucide-react";
 import Spinner from "@/components/spinner";
 
-type Category = { id: string; nameEn: string; nameAr: string; slug: string };
+type Category = { id: string; nameEn: string; nameAr: string; slug: string; _count?: { products: number } };
 
 export default function CategoriesManager({ categories }: { categories: Category[] }) {
   const router = useRouter();
+  const t = useTranslations("admin");
   const [nameEn, setNameEn] = useState("");
   const [nameAr, setNameAr] = useState("");
   const [loading, setLoading] = useState(false);
@@ -25,71 +27,79 @@ export default function CategoriesManager({ categories }: { categories: Category
     });
     setLoading(false);
     if (!res.ok) {
-      toast.error("An error occurred");
+      toast.error(t("genericError"));
       return;
     }
     setNameEn("");
     setNameAr("");
-    toast.success("Added successfully");
+    toast.success(t("added"));
     router.refresh();
   };
 
   const handleDelete = async (id: string) => {
-    if (!confirm("Delete this category?")) return;
+    if (!confirm(t("confirmDeleteCategory"))) return;
     setDeletingId(id);
     const res = await fetch(`/api/categories/${id}`, { method: "DELETE" });
     setDeletingId(null);
     if (!res.ok) {
-      toast.error("Cannot delete a category linked to products");
+      toast.error(t("categoryInUse"));
       return;
     }
-    toast.success("Deleted");
+    toast.success(t("deleted"));
     router.refresh();
   };
 
   return (
-    <div>
-      <form onSubmit={handleAdd} className="grid grid-cols-1 md:grid-cols-3 gap-3 mb-6">
-        <input
-          required
-          value={nameEn}
-          onChange={(e) => setNameEn(e.target.value)}
-          placeholder="Category name (English)"
-          className="border border-neutral-300 rounded-lg px-3 py-2"
-        />
-        <input
-          required
-          dir="rtl"
-          value={nameAr}
-          onChange={(e) => setNameAr(e.target.value)}
-          placeholder="اسم الفئة (عربي)"
-          className="border border-neutral-300 rounded-lg px-3 py-2"
-        />
-        <button
-          disabled={loading}
-          className="bg-amber-600 hover:bg-amber-700 text-white px-5 rounded-lg font-medium disabled:opacity-50 flex items-center justify-center gap-2"
-        >
-          {loading && <Spinner size={14} />}
-          Add
+    <div className="space-y-6">
+      <form onSubmit={handleAdd} className="card p-5 grid grid-cols-1 md:grid-cols-[1fr_1fr_auto] gap-3 items-end">
+        <div>
+          <label className="label">{t("categoryNameEn")}</label>
+          <input required dir="ltr" value={nameEn} onChange={(e) => setNameEn(e.target.value)} className="field" />
+        </div>
+        <div>
+          <label className="label">{t("categoryNameAr")}</label>
+          <input required dir="rtl" value={nameAr} onChange={(e) => setNameAr(e.target.value)} className="field" />
+        </div>
+        <button disabled={loading} className="btn-primary !py-2.5">
+          {loading ? <Spinner size={14} /> : <Plus size={16} />}
+          {t("add")}
         </button>
       </form>
 
-      <div className="bg-white border border-neutral-200 rounded-2xl divide-y divide-neutral-50">
-        {categories.map((c) => (
-          <div key={c.id} className="flex items-center justify-between p-4">
-            <span>
-              {c.nameEn} <span className="text-gray-400">/ {c.nameAr}</span>
-            </span>
-            <button
-              onClick={() => handleDelete(c.id)}
-              disabled={deletingId === c.id}
-              className="text-red-500 disabled:opacity-50"
-            >
-              {deletingId === c.id ? <Spinner size={16} /> : <Trash2 size={16} />}
-            </button>
-          </div>
-        ))}
-        {categories.length === 0 && <p className="p-6 text-center text-gray-500">No categories yet.</p>}
+      <div className="card overflow-hidden">
+        {categories.length === 0 ? (
+          <p className="p-10 text-center text-sm text-ink/50">{t("noCategories")}</p>
+        ) : (
+          <table className="w-full text-sm">
+            <thead>
+              <tr className="text-xs text-ink/50 border-b border-line bg-ink/[0.015]">
+                <th className="text-start font-medium px-4 py-2.5">{t("categoryNameEn")}</th>
+                <th className="text-start font-medium px-4 py-2.5">{t("categoryNameAr")}</th>
+                <th className="text-end font-medium px-4 py-2.5">{t("products")}</th>
+                <th className="px-4 py-2.5" />
+              </tr>
+            </thead>
+            <tbody>
+              {categories.map((c) => (
+                <tr key={c.id} className="border-b border-line last:border-0">
+                  <td className="px-4 py-3 text-ink" dir="ltr">{c.nameEn}</td>
+                  <td className="px-4 py-3 text-ink" dir="rtl">{c.nameAr}</td>
+                  <td className="px-4 py-3 text-end tabular-nums text-ink/60">{c._count?.products ?? "—"}</td>
+                  <td className="px-4 py-3 text-end">
+                    <button
+                      onClick={() => handleDelete(c.id)}
+                      disabled={deletingId === c.id}
+                      title={t("delete")}
+                      className="p-1.5 rounded text-ink/50 hover:text-red-700 hover:bg-red-50 disabled:opacity-50"
+                    >
+                      {deletingId === c.id ? <Spinner size={15} /> : <Trash2 size={15} />}
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        )}
       </div>
     </div>
   );

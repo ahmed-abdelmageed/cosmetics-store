@@ -1,27 +1,23 @@
 import type { Metadata } from "next";
-import { Cairo, Inter } from "next/font/google";
+import { Cairo, Inter, Playfair_Display } from "next/font/google";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages } from "next-intl/server";
 import { notFound } from "next/navigation";
 import { routing } from "@/i18n/routing";
 import "../globals.css";
-import Navbar from "@/components/navbar";
-import Footer from "@/components/footer";
 import Providers from "@/components/providers";
 
-const cairo = Cairo({
-  variable: "--font-cairo",
-  subsets: ["arabic", "latin"],
-});
-
-const inter = Inter({
-  variable: "--font-inter",
-  subsets: ["latin"],
-});
+const cairo = Cairo({ variable: "--font-cairo", subsets: ["arabic", "latin"] });
+const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
+const playfair = Playfair_Display({ variable: "--font-playfair", subsets: ["latin"], });
 
 export const metadata: Metadata = {
-  title: "Lumière Cosmetics",
-  description: "Shop the best cosmetics and skincare products online",
+  title: {
+    default: "Lumière Cosmetics — Authentic Beauty & Skincare",
+    template: "%s · Lumière Cosmetics",
+  },
+  description:
+    "Shop authentic cosmetics, skincare and fragrances for him and her. Daily offers, fast delivery and cash on delivery.",
 };
 
 export function generateStaticParams() {
@@ -41,18 +37,21 @@ export default async function LocaleLayout({
   }
 
   const messages = await getMessages();
-  const dir = locale === "ar" ? "rtl" : "ltr";
-  const fontVar = locale === "ar" ? "var(--font-cairo)" : "var(--font-inter)";
+  const isAr = locale === "ar";
+  const fonts = {
+    fontFamily: isAr ? "var(--font-cairo)" : "var(--font-inter)",
+    "--font-display-family": isAr ? "var(--font-cairo)" : "var(--font-playfair)",
+  } as React.CSSProperties;
 
   return (
-    <html lang={locale} dir={dir} className={`${cairo.variable} ${inter.variable} h-full antialiased`}>
-      <body className="min-h-full flex flex-col bg-neutral-50" style={{ fontFamily: fontVar }}>
+    <html
+      lang={locale}
+      dir={isAr ? "rtl" : "ltr"}
+      className={`${cairo.variable} ${inter.variable} ${playfair.variable} h-full antialiased`}
+    >
+      <body className="min-h-full flex flex-col bg-background text-foreground" style={fonts}>
         <NextIntlClientProvider messages={messages}>
-          <Providers>
-            <Navbar />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </Providers>
+          <Providers>{children}</Providers>
         </NextIntlClientProvider>
       </body>
     </html>

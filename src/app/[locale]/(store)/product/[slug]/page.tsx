@@ -5,6 +5,8 @@ import { getTranslations, getLocale } from "next-intl/server";
 import { formatPrice, getFinalPrice } from "@/lib/utils";
 import { pickLocale } from "@/i18n/pick-locale";
 import AddToCartButton from "@/components/add-to-cart-button";
+import { Link } from "@/i18n/navigation";
+import { ImageOff } from "lucide-react";
 
 export const dynamic = "force-dynamic";
 
@@ -14,6 +16,8 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   if (!product) return notFound();
 
   const t = await getTranslations("product");
+  const tNav = await getTranslations("nav");
+  const tCommon = await getTranslations("common");
   const locale = await getLocale();
   const name = pickLocale(locale, product.nameEn, product.nameAr);
   const description = pickLocale(locale, product.descriptionEn, product.descriptionAr);
@@ -24,8 +28,20 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
   const hasDiscount = product.discountActive && product.discountPercent > 0;
 
   return (
-    <div className="container-app py-8 grid grid-cols-1 md:grid-cols-2 gap-10">
-      <div className="relative aspect-square bg-white rounded-2xl border border-neutral-200 overflow-hidden">
+    <div className="container-app py-8 md:py-12">
+      <nav className="text-xs text-ink/50 mb-6 flex items-center gap-2">
+        <Link href="/" className="hover:text-ink">{tNav("home")}</Link>
+        <span>/</span>
+        <Link href="/shop" className="hover:text-ink">{tNav("shop")}</Link>
+        {categoryName && product.category && (
+          <>
+            <span>/</span>
+            <Link href={`/shop?category=${product.category.slug}`} className="hover:text-ink">{categoryName}</Link>
+          </>
+        )}
+      </nav>
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-14">
+      <div className="relative aspect-[4/5] bg-cream rounded-md overflow-hidden">
         {product.images[0] ? (
           <Image
             src={product.images[0]}
@@ -35,10 +51,13 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             className="object-cover"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center text-neutral-300">No image</div>
+          <div className="w-full h-full flex flex-col gap-2 items-center justify-center text-ink/25">
+            <ImageOff size={32} />
+            <span className="text-xs">{tCommon("noImage")}</span>
+          </div>
         )}
         {hasDiscount && (
-          <span className="absolute top-3 right-3 bg-amber-600 text-white text-sm font-bold px-3 py-1 rounded-full">
+          <span className="absolute top-4 start-4 bg-white text-brand-800 text-xs font-semibold px-2 py-1 rounded-[3px]">
             -{product.discountPercent}%
           </span>
         )}
@@ -46,21 +65,21 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
 
       <div>
         {categoryName && (
-          <p className="text-neutral-500 text-sm font-medium mb-2">{categoryName}</p>
+          <p className="text-ink/50 text-sm mb-2">{categoryName}</p>
         )}
-        <h1 className="text-3xl font-bold mb-3">{name}</h1>
-        <div className="flex items-center gap-3 mb-4">
-          <span className="text-2xl font-bold text-amber-700">{formatPrice(finalPrice)}</span>
+        <h1 className="font-display text-3xl md:text-4xl text-ink leading-tight mb-4">{name}</h1>
+        <div className="flex items-baseline gap-3 mb-6 pb-6 border-b border-line">
+          <span className="text-xl font-medium text-ink">{formatPrice(finalPrice)}</span>
           {hasDiscount && (
-            <span className="text-gray-400 line-through">{formatPrice(product.price)}</span>
+            <span className="text-ink/40 line-through">{formatPrice(product.price)}</span>
           )}
         </div>
-        <p className="text-gray-600 leading-7 mb-6 whitespace-pre-line">{description}</p>
+        <p className="text-ink/70 leading-7 mb-6 whitespace-pre-line">{description}</p>
         <p className="text-sm mb-6">
           {product.stock > 0 ? (
-            <span className="text-green-600 font-medium">{t("inStock")} ({product.stock})</span>
+            <span className="text-emerald-700">{t("inStock")} ({product.stock})</span>
           ) : (
-            <span className="text-red-600 font-medium">{t("outOfStock")}</span>
+            <span className="text-red-700">{t("outOfStock")}</span>
           )}
         </p>
 
@@ -73,6 +92,7 @@ export default async function ProductPage({ params }: { params: Promise<{ slug: 
             stock: product.stock,
           }}
         />
+      </div>
       </div>
     </div>
   );

@@ -33,38 +33,38 @@ function LoginForm() {
 
   return (
     <div className="container-app py-16 max-w-md mx-auto">
-      <h1 className="text-2xl font-bold mb-6 text-center">{t("loginTitle")}</h1>
-      <form onSubmit={handleSubmit} className="bg-white border border-neutral-200 rounded-2xl p-6 space-y-4">
+      <h1 className="font-display text-3xl mb-8 text-center">{t("loginTitle")}</h1>
+      <form onSubmit={handleSubmit} className="card p-6 md:p-8 space-y-5">
         <div>
-          <label className="text-sm font-medium">{t("email")}</label>
+          <label className="label">{t("email")}</label>
           <input
             type="email"
             required
             value={email}
             onChange={(e) => setEmail(e.target.value)}
-            className="w-full mt-1 border border-neutral-300 rounded-lg px-3 py-2"
+            className="field"
           />
         </div>
         <div>
-          <label className="text-sm font-medium">{t("password")}</label>
+          <label className="label">{t("password")}</label>
           <input
             type="password"
             required
             value={password}
             onChange={(e) => setPassword(e.target.value)}
-            className="w-full mt-1 border border-neutral-300 rounded-lg px-3 py-2"
+            className="field"
           />
         </div>
         <button
           disabled={loading}
-          className="w-full bg-amber-600 hover:bg-amber-700 text-white rounded-lg py-3 font-medium disabled:opacity-50 flex items-center justify-center gap-2"
+          className="btn-primary w-full py-3.5"
         >
           {loading && <Spinner size={16} />}
           {loading ? t("loggingIn") : t("loginButton")}
         </button>
         <p className="text-sm text-center">
           {t("noAccount")}{" "}
-          <Link href="/register" className="text-amber-600 font-medium">
+          <Link href="/register" className="text-ink font-medium underline underline-offset-4">
             {t("createAccount")}
           </Link>
         </p>

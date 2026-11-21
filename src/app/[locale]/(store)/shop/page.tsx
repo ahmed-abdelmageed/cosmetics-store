@@ -47,38 +47,38 @@ export default async function ShopPage({
           : t("title");
 
   return (
-    <div className="container-app py-8">
-      <h1 className="text-2xl font-bold mb-6">{pageTitle}</h1>
+    <div className="container-app py-10 md:py-14">
+      <h1 className="font-display text-3xl md:text-4xl mb-8">{pageTitle}</h1>
 
-      <div className="flex gap-2 flex-wrap mb-6">
+      <div className="flex gap-2 flex-wrap mb-8 pb-8 border-b border-line">
         <Link
           href="/shop"
-          className={`px-4 py-1.5 rounded-full text-sm border ${
-            !category && !onSale && !gender ? "bg-amber-600 text-white border-amber-600" : "border-neutral-300"
+          className={`px-4 py-2 rounded-[4px] text-sm border transition-colors ${
+            !category && !onSale && !gender ? "bg-ink text-white border-ink" : "bg-white border-line text-ink/75 hover:border-ink"
           }`}
         >
           {t("all")}
         </Link>
         <Link
           href="/shop?gender=men"
-          className={`px-4 py-1.5 rounded-full text-sm border ${
-            genderFilter === "MEN" ? "bg-amber-600 text-white border-amber-600" : "border-neutral-300"
+          className={`px-4 py-2 rounded-[4px] text-sm border transition-colors ${
+            genderFilter === "MEN" ? "bg-ink text-white border-ink" : "bg-white border-line text-ink/75 hover:border-ink"
           }`}
         >
           {t("men")}
         </Link>
         <Link
           href="/shop?gender=women"
-          className={`px-4 py-1.5 rounded-full text-sm border ${
-            genderFilter === "WOMEN" ? "bg-amber-600 text-white border-amber-600" : "border-neutral-300"
+          className={`px-4 py-2 rounded-[4px] text-sm border transition-colors ${
+            genderFilter === "WOMEN" ? "bg-ink text-white border-ink" : "bg-white border-line text-ink/75 hover:border-ink"
           }`}
         >
           {t("women")}
         </Link>
         <Link
           href="/shop?onSale=1"
-          className={`px-4 py-1.5 rounded-full text-sm border ${
-            onSale ? "bg-amber-600 text-white border-amber-600" : "border-neutral-300"
+          className={`px-4 py-2 rounded-[4px] text-sm border transition-colors ${
+            onSale ? "bg-ink text-white border-ink" : "bg-white border-line text-ink/75 hover:border-ink"
           }`}
         >
           {t("offers")}
@@ -87,8 +87,8 @@ export default async function ShopPage({
           <Link
             key={c.id}
             href={`/shop?category=${c.slug}`}
-            className={`px-4 py-1.5 rounded-full text-sm border ${
-              category === c.slug ? "bg-amber-600 text-white border-amber-600" : "border-neutral-300"
+            className={`px-4 py-2 rounded-[4px] text-sm border transition-colors ${
+              category === c.slug ? "bg-ink text-white border-ink" : "bg-white border-line text-ink/75 hover:border-ink"
             }`}
           >
             {pickLocale(locale, c.nameEn, c.nameAr)}
@@ -97,9 +97,9 @@ export default async function ShopPage({
       </div>
 
       {products.length === 0 ? (
-        <p className="text-gray-500">{t("noProducts")}</p>
+        <p className="py-16 text-center text-ink/50">{t("noProducts")}</p>
       ) : (
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+        <div className="grid grid-cols-2 md:grid-cols-4 gap-x-4 gap-y-8 md:gap-x-6">
           {products.map((p) => (
             <ProductCard key={p.id} product={p} />
           ))}
